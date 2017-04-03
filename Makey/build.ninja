@@ -1,0 +1,25 @@
+project = Makey
+sourceDir = $solutionDir/$project
+buildDir = $solutionDir/Build/$project
+binDir = $solutionDir/Bin
+cxx = cl
+cxx-in = /c 
+cxx-out = /Fo
+cxx-flags = /nologo /showIncludes /W3 /sdl /WX /EHsc /GR- /fp:fast /vms /I $solutionDir
+cxx-deps = msvc
+lnk = link
+lnk-in = 
+lnk-out = /OUT:
+lnk-flags = /nologo /SUBSYSTEM:CONSOLE /DEBUG /OPT:REF /OPT:ICF /MACHINE:X64
+rule compile
+  command = $cxx $cxx-in$in $cxx-out$out $cxx-flags
+  description = compile $out
+  deps = $cxx-deps
+rule link
+  command = $lnk $lnk-in$in $lnk-out$out $lnk-flags
+  description = link $out
+build $buildDir/Main.obj: compile $sourceDir/Main.cpp
+build $buildDir/NinjaFile.obj: compile $sourceDir/NinjaFile.cpp
+build $buildDir/Path.obj: compile $sourceDir/Path.cpp
+build $binDir/$project.exe: link $buildDir/Main.obj $buildDir/NinjaFile.obj $buildDir/Path.obj
+build $project: phony $binDir/$project.exe
